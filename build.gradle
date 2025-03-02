@@ -2,8 +2,11 @@ plugins {
     id 'application'
 }
 
+group 'com.building.controls'
+version '1.0-SNAPSHOT'
+
 application {
-    mainClassName = 'MainApplication'
+	mainClass = 'com.building.controls.MainApplication'
 }
 
 repositories {
