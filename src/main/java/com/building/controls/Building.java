@@ -2,14 +2,11 @@ package com.building.controls;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Building {
-    private double requestedTemperature = 25.0;
-    private List<Apartment> apartments;
-    private List<CommonRoom> commonRooms;
-    private Timer timer;
+    private double requestedTemperature = 20.0;  // Default temperature set to 20°C
+    public final List<Apartment> apartments;
+    public final List<CommonRoom> commonRooms;
 
     public Building() {
         apartments = new ArrayList<>();
@@ -18,39 +15,22 @@ public class Building {
 
     public void addApartment(Apartment apartment) {
         apartments.add(apartment);
+        recalculateHeatingAndCooling();  // Recalculate after adding a new apartment
     }
 
     public void addCommonRoom(CommonRoom commonRoom) {
         commonRooms.add(commonRoom);
+        recalculateHeatingAndCooling();  // Recalculate after adding a new common room
     }
 
     public void setRequestedTemperature(double requestedTemperature) {
         this.requestedTemperature = requestedTemperature;
-        recalculateHeatingAndCooling();
+        recalculateHeatingAndCooling();  // Recalculate when temperature changes
     }
 
-    public void recalculateHeatingAndCooling() {
+    private void recalculateHeatingAndCooling() {
         apartments.forEach(apartment -> apartment.adjustTemperature(requestedTemperature));
         commonRooms.forEach(commonRoom -> commonRoom.adjustTemperature(requestedTemperature));
-    }
-
-    public void startTemperatureUpdate() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                apartments.forEach(Apartment::updateTemperature);
-                commonRooms.forEach(CommonRoom::updateTemperature);
-                recalculateHeatingAndCooling();
-                printStatus();
-            }
-        }, 0, 5000);  // Update every 5 seconds
-    }
-
-    public void stopTemperatureUpdate() {
-        if (timer != null) {
-            timer.cancel();
-        }
     }
 
     public void printStatus() {
@@ -61,4 +41,3 @@ public class Building {
         System.out.println("-----------------------\n");
     }
 }
-

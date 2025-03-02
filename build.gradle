@@ -6,7 +6,7 @@ group 'com.building.controls'
 version '1.0-SNAPSHOT'
 
 application {
-	mainClass = 'com.building.controls.MainApplication'
+    mainClass = 'com.building.controls.MainApplication' // Adjust according to your main class
 }
 
 repositories {
@@ -20,4 +20,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': application.mainClass // This ensures the manifest contains the correct Main-Class
+        )
+    }
 }

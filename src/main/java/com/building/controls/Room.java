@@ -4,46 +4,47 @@ import java.util.Random;
 
 public class Room {
     private static int idCounter = 1;
-    private int id;
-    private double temperature;
-    private boolean heatingEnabled;
-    private boolean coolingEnabled;
+    private final int roomId;
+    protected double temperature;
+    protected boolean heatingEnabled;
+    protected boolean coolingEnabled;
+    private final Random random = new Random();
 
     public Room() {
-        this.id = idCounter++;
-        this.temperature = new Random().nextDouble() * (40 - 10) + 10;  // Random temp between 10 and 40
+        this.roomId = idCounter++;
+        this.temperature = generateRandomTemperature();
         this.heatingEnabled = false;
         this.coolingEnabled = false;
     }
 
-    public double getTemperature() {
-        return temperature;
+    private double generateRandomTemperature() {
+        return 10 + random.nextDouble() * 30;  // Generates temperature between 10 and 40 degrees
     }
 
     public void adjustTemperature(double requestedTemperature) {
-        if (temperature < requestedTemperature) {
+        double threshold = 0.5;  // Threshold for "close enough"
+        if (Math.abs(temperature - requestedTemperature) <= threshold) {
+            heatingEnabled = false;
+            coolingEnabled = false;
+        } else if (temperature < requestedTemperature) {
             heatingEnabled = true;
             coolingEnabled = false;
-        } else if (temperature > requestedTemperature) {
-            heatingEnabled = false;
-            coolingEnabled = true;
         } else {
             heatingEnabled = false;
-            coolingEnabled = false;
+            coolingEnabled = true;
         }
     }
 
     public void updateTemperature() {
         if (heatingEnabled) {
-            temperature += 0.1;  // Temperature increases slowly if heating is enabled
+            temperature += 0.1;  // Slow increase in temperature when heating
         } else if (coolingEnabled) {
-            temperature -= 0.1;  // Temperature decreases slowly if cooling is enabled
+            temperature -= 0.1;  // Slow decrease in temperature when cooling
         }
     }
 
     @Override
     public String toString() {
-        return "Room ID: " + id + " | Temp: " + temperature + "°C | Heating: " + heatingEnabled + " | Cooling: " + coolingEnabled;
+        return "Room ID: " + roomId + ", Temperature: " + temperature + "°C, Heating: " + (heatingEnabled ? "ON" : "OFF") + ", Cooling: " + (coolingEnabled ? "ON" : "OFF");
     }
 }
-
