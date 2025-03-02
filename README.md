@@ -49,9 +49,9 @@ You can build and run the application in a Docker container.
 
 1. **Build the Docker image:**
    ```bash
-   docker build -t buildingcontrols .
+   docker build -t buildingcontrols
 
 
 2. **Run the Docker image:**
    ```bash
-   docker run -it buildingcontrols.
+   docker run -it buildingcontrols
